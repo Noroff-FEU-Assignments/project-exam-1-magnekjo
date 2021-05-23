@@ -7,26 +7,32 @@ async function getPosts() {
     const response = await fetch(corsFix + url);
     const result = await response.json();
 
-    var postCards = document.querySelectorAll(".post-card");
+    const postCards = document.querySelectorAll(".post-card");
     const date = result[0].date;
     const dateSplit = date.split("T", 1);
 
-    console.log(postCards);
+    for (let i = 0; i < postCards.length; i++) {
+      postCards[i].innerHTML = " ";
+    }
 
     for (let i = 0; i < 9; i++) {
-      postCards[i].innerHTML = `
-      <img class="card-img" src="${result[i]._embedded["wp:featuredmedia"][0].source_url}" />
-      <div class="card-info">
-        <div>
-          <h3>${result[i].title.rendered}</h3>
-          <p>${result[i].excerpt.rendered}
-          </p>
+      postCards[i].innerHTML += `
+      <a class="card-link" href="blogpost.html?id=${result[i].id}">
+        <div class="post-card">
+          <img class="card-img" src="${result[i]._embedded["wp:featuredmedia"][0].source_url}" />
+          <div class="card-info">
+            <div>
+              <h3>${result[i].title.rendered}</h3>
+              <p>${result[i].excerpt.rendered}
+              </p>
+            </div>
+            <div class="card-footer">
+              <p>${dateSplit}</p>
+              <p>Author: ${result[i]._embedded.author[0].name}</p>
+            </div>
+          </div>
         </div>
-        <div class="card-footer">
-          <p>${dateSplit}</p>
-          <p>Author: ${result[i]._embedded.author[0].name}</p>
-        </div>
-      </div>`;
+      </a>`;
     }
   } catch (error) {
     console.log(error);
@@ -87,3 +93,12 @@ prevBtn.addEventListener("click", () => {
   console.log(counter);
   checkBtn();
 });
+
+// Misc
+const travelBtn = document.querySelectorAll(".city a");
+
+for (let i = 0; i < travelBtn.length; i++) {
+  travelBtn[i].addEventListener("click", () => {
+    alert("Sorry, but this content is currently not available.");
+  });
+}
